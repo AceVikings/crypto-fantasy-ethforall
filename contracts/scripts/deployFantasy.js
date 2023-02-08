@@ -7,29 +7,11 @@
 const hre = require("hardhat");
 
 async function main() {
-  const AddressRegistryFactory = await hre.ethers.getContractFactory(
-    "AddressRegistry"
-  );
-  const Registry = await AddressRegistryFactory.deploy();
-
-  console.log("Registry deployed at:", Registry.address);
-
   const CryptoFantasyFactory = await hre.ethers.getContractFactory(
     "CryptoFantasy"
   );
   const Fantasy = await CryptoFantasyFactory.deploy();
-  await Fantasy.init(Registry.address);
-  console.log("Fantasy deployed at:", Fantasy.address);
-  await Fantasy.deployTransaction.wait(5);
-  try {
-    await hre.run("verify:verify", {
-      address: Registry.address,
-      contract: "contracts/AddressRegistry.sol:AddressRegistry",
-      network: "mumbai",
-    });
-  } catch (err) {
-    console.log(err);
-  }
+  await Fantasy.init("0x61C1d559aadB9762EFEeB2b434875f4ba1Cd2EEc");
 
   try {
     await hre.run("verify:verify", {
@@ -37,9 +19,7 @@ async function main() {
       contract: "contracts/CryptoFantasy.sol:CryptoFantasy",
       network: "mumbai",
     });
-  } catch (err) {
-    console.log(err);
-  }
+  } catch (err) {}
 }
 
 // We recommend this pattern to be able to use async/await everywhere
