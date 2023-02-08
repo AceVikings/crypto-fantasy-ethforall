@@ -15,6 +15,8 @@ contract CryptoFantasy is ERC721EnumerableUpgradeable {
 
     uint[][] priceSnapshot;
     uint[] sortedIndex;
+    uint[] tokenValue;
+    uint[6] tokenReturn = [25, 20, 15, 10, 10, 5];
     mapping(uint => uint) public userBalance;
     mapping(uint => mapping(uint => uint)) public userPortfolio; //token index > amount owned
     mapping(uint => uint) public totalPortfolio;

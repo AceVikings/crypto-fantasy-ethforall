@@ -19,7 +19,7 @@ When a user registers, we mint an NFT per registration and allot 20_000e8 balanc
 
 ### Balance and Token Purchase
 
-Users can now use this balance to purchase tokens based on the snapshot price. Each purchase deduct from user balance and adds tokens to user portfolio and total portfolio.
+Users can now use this balance to purchase tokens based on the snapshot price. Each purchase deducts from user balance and adds tokens to user portfolio and total portfolio.
 
 ### Tournament End and Winning Calculation
 
@@ -56,6 +56,6 @@ $$totalVal_{0} = {100 * 0.3 \over 20}.$$
 $$ = {30 \over 20}.$$
 $$ = {1.5}.$$
 
-Therefore, if you user had 10 token0 in their portfolio, they can now claim 15 matic against it.
+Therefore, if the user had 10 token0 in their portfolio, they can now claim 15 matic against it.
 
-This ensures that user not only look for the most profit but also diverify their portfolios to possibly hold greater shares from each token.
+This ensures that users not only look for the most profit but also diverify their portfolios to possibly hold greater shares from each token.
