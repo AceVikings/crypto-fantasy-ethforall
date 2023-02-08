@@ -49,7 +49,7 @@ We can now take the contract balance and assing different weights to different p
 Index = [0,2,3,1]
 ```
 
-We can assign weightage in terms of percentange as `[30,20,10,5] ` <br>
+We can assign weightage in terms of percentange as `[30,20,10,5] ` with 5% going towards maintenance fees <br>
 And let's say in this example our total balance is `100 matic` and total portfolio values are `[20,30,5,30]`
 
 $$totalVal_{0} = {100 * 0.3 \over 20}.$$
