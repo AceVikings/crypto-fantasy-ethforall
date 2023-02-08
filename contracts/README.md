@@ -49,4 +49,13 @@ We can now take the contract balance and assing different weights to different p
 Index = [0,2,3,1]
 ```
 
-We can assign
+We can assign weightage in terms of percentange as `[30,20,10,5] ` <br>
+And let's say in this example our total balance is `100 matic` and total portfolio values are `[20,30,5,30]`
+
+$$totalVal_{0} = {100 * 0.3 \over 20}.$$
+$$ = {30 \over 20}.$$
+$$ = {1.5}.$$
+
+Therefore, if you user had 10 token0 in their portfolio, they can now claim 15 matic against it.
+
+This ensures that user not only look for the most profit but also diverify their portfolios to possibly hold greater shares from each token.
