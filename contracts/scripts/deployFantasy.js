@@ -12,14 +12,17 @@ async function main() {
   );
   const Fantasy = await CryptoFantasyFactory.deploy();
   await Fantasy.init("0x61C1d559aadB9762EFEeB2b434875f4ba1Cd2EEc");
-
+  console.log("Fantasy deployed at:", Fantasy.address);
+  await Fantasy.deployTransaction.wait(5);
   try {
     await hre.run("verify:verify", {
       address: Fantasy.address,
       contract: "contracts/CryptoFantasy.sol:CryptoFantasy",
       network: "mumbai",
     });
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 // We recommend this pattern to be able to use async/await everywhere

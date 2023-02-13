@@ -104,12 +104,49 @@ describe("Fantasy", function () {
       updatedAt: 0,
       answeredInRound: 0,
     });
-    await fantasy.init(0, registry.address);
+    await fantasy.init(registry.address);
   });
 
-  describe("Test", function () {
-    it("Should return value", async function () {
-      console.log(await fantasy.getSnapshot(0));
+  describe("Init", function () {
+    it("Should take snapshot", async function () {
+      let snapshot = await fantasy.getSnapshot(0);
+      expect(snapshot.length).to.eq(8);
+    });
+  });
+  describe("Registration", function () {
+    it("Should Register user", async function () {
+      await fantasy.register({ value: ethers.utils.parseEther("0.01") });
+      expect(await fantasy.balanceOf(owner.address)).to.eq(1);
+    });
+    it("Should mint token 1 for user", async function () {
+      expect(await fantasy.ownerOf(1)).to.eq(owner.address);
+    });
+    it("Should assign balance value to user", async function () {
+      expect(await fantasy.userBalance(1)).to.eq(
+        ethers.utils.parseUnits("20000", 8)
+      );
+    });
+  });
+  describe("Buy tokens", function () {
+    it("Should allow user to buy tokens", async function () {
+      await fantasy.buyToken(1, 0, ethers.utils.parseUnits("10", 8));
+      expect(await fantasy.userBalance(1)).to.eq(
+        ethers.utils.parseUnits("19990", 8)
+      );
+    });
+    it("Should update user portfolio", async function () {
+      let amount = await fantasy.getTokenAmount(
+        ethers.utils.parseUnits("10", 8),
+        0
+      );
+      expect(await fantasy.userPortfolio(1, 0)).to.eq(amount);
+    });
+    it("Should update total portfolio", async function () {
+      let amount = await fantasy.getTokenAmount(
+        ethers.utils.parseUnits("10", 8),
+        0
+      );
+      expect(await fantasy.totalPortfolio(0)).to.eq(amount);
     });
   });
 });
