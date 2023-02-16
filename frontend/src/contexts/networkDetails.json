@@ -1,0 +1,31 @@
+{
+  "80001": {
+    "testnet": true,
+    "name": "Polygon Testnet",
+    "icon": "/img/polygon_logo.png",
+    "RPC_URL": "https://rpc-mumbai.maticvigil.com/",
+    "ESCROW_CONTRACT_ADDRESS": "0xcb9870D33D511cAB6aEEa942aC756f62F38F92c8",
+    "CHAIN_ID": 80001,
+    "MULTI_CALL_ADDRESS": "0x08411ADd0b5AA8ee47563b146743C13b3556c9Cc",
+    "NATIVE_CURRENCY": {
+      "name": "MATIC",
+      "symbol": "MATIC",
+      "decimals": 18
+    },
+    "FANTASY_ADDRESS": "0xCe3D3d29d87C4C8aC676d077d7a156BDA4016072"
+  },
+  "137": {
+    "icon": "/img/polygon_logo.png",
+    "name": "Polygon Mainnet",
+    "RPC_URL": "https://polygon-rpc.com/",
+    "CHAIN_ID": 137,
+    "NATIVE_CURRENCY": {
+      "name": "MATIC",
+      "symbol": "MATIC",
+      "decimals": 18
+    },
+    "MULTI_CALL_ADDRESS": "0xcA11bde05977b3631167028862bE2a173976CA11",
+    "ESCROW_CONTRACT_ADDRESS": "0xaA7523A2f733952d05f7a40666D3752E95c49028",
+    "FANTASY_ADDRESS": "0xCe3D3d29d87C4C8aC676d077d7a156BDA4016072"
+  }
+}
