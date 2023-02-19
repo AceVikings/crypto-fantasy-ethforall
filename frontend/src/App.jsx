@@ -3,8 +3,10 @@ import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { useWeb3Context } from "./contexts/Web3Context";
 import WrongNetwork from "./pages/WrongNetwork";
+import { Auth, useAuth } from "@arcana/auth-react";
 
 function App() {
+  const auth = useAuth();
   const [count, setCount] = useState(0);
   const [userData, setUserData] = useState([]);
   const [initialPrices, setInitialPrices] = useState([]);
@@ -25,6 +27,7 @@ function App() {
       setUserData(data);
     })();
   }, [account]);
+
   if (account && isWrongNetwork) {
     return (
       <>

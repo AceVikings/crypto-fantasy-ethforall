@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { BigNumber, Contract, ethers, utils } from "ethers";
 import nftAbi from "./NFTabi.json";
-
+import { AuthProvider } from "@arcana/auth";
 import {
   Provider as MulticallProvider,
   Contract as MulticallContract,
@@ -13,11 +13,13 @@ const Web3Context = createContext();
 const supportedChains = Object.keys(NETWORK_DETAILS);
 console.log(supportedChains);
 const BASE_URL = "https://escrow.onrender.com" || "http://localhost:5000";
+const auth = new AuthProvider(`cdc310cc4f22e3a3e50c9cee8bb75ccfe22378ee`);
 
 export const Web3Provider = (props) => {
   const [account, setAccount] = useState(false);
   const [signer, setSigner] = useState();
   const [contractObjects, setContractObjects] = useState();
+  const [update, setUpdate] = useState(0);
 
   const [presentNetwork, setPresentNetwork] = useState("80001");
   // const [currentNetwork, setCurrentNetwork] = useState(
@@ -235,7 +237,7 @@ export const Web3Provider = (props) => {
     }
   };
   functionsToExport.getInitialPrices = async () => {
-    const prices = (await contractObjects?.escrowContract?.getSnapshot(0)).map(
+    const prices = (await contractObjects?.escrowContract?.getSnapshot(0))?.map(
       (e) => e.toString()
     );
     return prices;
@@ -264,7 +266,15 @@ export const Web3Provider = (props) => {
       //Kinda inefficient but ok
       let allPortfolioCalls = [];
       tokens.map((tokenId) => {
-        for (let i = 0; i <= 7; i++) {
+        for (let i = 0; i <= 9; i++) {
+          if (i === 8) {
+            allPortfolioCalls.push(multicallContract.userBalance(tokenId));
+            return;
+          }
+          if (i === 9) {
+            allPortfolioCalls.push(multicallContract.getReward(tokenId));
+            return;
+          }
           allPortfolioCalls.push(multicallContract.userPortfolio(tokenId, i));
         }
       });
@@ -276,8 +286,8 @@ export const Web3Provider = (props) => {
       const finalPortfolioObject = {};
       console.log(allPortfolioCalls);
       tokens.map((token, index) => {
-        for (let i = 0; i <= 7; i++) {
-          let portfolioIndex = parseInt(index) * 8 + i;
+        for (let i = 0; i <= 9; i++) {
+          let portfolioIndex = parseInt(index) * 10 + i;
           if (finalPortfolioObject[token.toString()] == undefined) {
             finalPortfolioObject[token.toString()] = {};
           }
@@ -291,6 +301,32 @@ export const Web3Provider = (props) => {
       return [];
     }
   };
+  functionsToExport.logout = async () => {
+    await auth.logout();
+  };
+  functionsToExport.connectArcana = async () => {
+    await auth.init();
+    const arcanaProvider = await auth.connect();
+    const provider = new ethers.providers.Web3Provider(arcanaProvider);
+    if (!provider) {
+      toast.error("You need a wallet to continue!");
+      return;
+    }
+
+    if (provider) {
+      await arcanaProvider.request({ method: "eth_requestAccounts" });
+      const accounts = await arcanaProvider.request({ method: "eth_accounts" });
+      // await promptChain();
+      arcanaProvider?.on("chainChanged", onChainChanged);
+      arcanaProvider?.on("accountsChanged", onAccountsChanged);
+      setAccount(accounts[0]);
+      toast.success("Wallet Connected!");
+      const _signer = provider.getSigner();
+      setSigner(_signer);
+      console.log("don");
+    }
+  };
+
   functionsToExport.connectWallet = async (defaultAccount = -1) => {
     const { ethereum } = window;
     if (!ethereum) {
@@ -302,8 +338,8 @@ export const Web3Provider = (props) => {
       await ethereum.request({ method: "eth_requestAccounts" });
       const accounts = await ethereum.request({ method: "eth_accounts" });
       // await promptChain();
-      ethereum.on("chainChanged", onChainChanged);
-      ethereum.on("accountsChanged", onAccountsChanged);
+      ethereum?.on("chainChanged", onChainChanged);
+      ethereum?.on("accountsChanged", onAccountsChanged);
       setAccount(accounts[0]);
       toast.success("Wallet Connected!");
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -553,7 +589,10 @@ export const Web3Provider = (props) => {
       const txn = await contractObjects.escrowContract.register({
         value: utils.parseEther("0.01"),
       });
+      toast.info("Registering in Tournament");
       await txn.wait();
+      toast.success("Registration Successful!");
+      setUpdate((u) => u + 1);
     } catch (e) {
       console.log(e);
     }
@@ -565,11 +604,38 @@ export const Web3Provider = (props) => {
         index,
         BigNumber.from(amount).mul(BigNumber.from((10 ** 8).toString()))
       );
+      toast.info(`Purchasing tokens for portfolio #${tokenId}`);
       await txn.wait();
+      toast.success(`Transaction Successful`);
+      setUpdate((u) => u + 1);
     } catch (e) {
       console.log(e);
     }
   };
+  functionsToExport.retrieveReward = async (tokenId) => {
+    try {
+      const txn = await contractObjects.escrowContract.retrieveReward(tokenId);
+      toast.info(`Retrieving reward for portfolio #${tokenId}`);
+      await txn.wait();
+      toast.success(`Transaction Successful`);
+      setUpdate((u) => u + 1);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  functionsToExport.getTournamentInfo = async () => {
+    let data = await Promise.all([
+      await contractObjects.escrowContract.startTime(),
+      await contractObjects.escrowContract.duration(),
+      await contractObjects.escrowContract.totalSupply(),
+    ]);
+    data = data.map((e) => e.toString());
+    const [startTime, duration, totalSupply] = data;
+    return { startTime, duration, totalSupply };
+  };
+  // functionsToExport.getReward = async ()=>{
+
+  // }
 
   return (
     <Web3Context.Provider
@@ -582,6 +648,7 @@ export const Web3Provider = (props) => {
         currentNetwork,
         isWrongNetwork,
         promptChain,
+        update,
         ...functionsToExport,
       }}
     >
