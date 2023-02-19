@@ -10,19 +10,13 @@ async function main() {
   const CryptoFantasyFactory = await hre.ethers.getContractFactory(
     "CryptoFantasy"
   );
-  const Fantasy = await CryptoFantasyFactory.deploy();
-  await Fantasy.init("0xB607F90E9b7317f519f8A2dFa2C709560171C36e");
-  console.log("Fantasy deployed at:", Fantasy.address);
-  await Fantasy.deployTransaction.wait(5);
-  try {
-    await hre.run("verify:verify", {
-      address: Fantasy.address,
-      contract: "contracts/CryptoFantasy.sol:CryptoFantasy",
-      network: "mumbai",
-    });
-  } catch (err) {
-    console.log(err);
-  }
+  const Fantasy = await CryptoFantasyFactory.attach("");
+  await Fantasy.register({ value: hre.ethers.utils.parseEther("0.01") });
+  console.log("Registered");
+  await Fantasy.buyToken(0, "index", "amount to spend");
+  await Fantasy.buyToken(0, "index", "amount to spend");
+  await Fantasy.buyToken(0, "index", "amount to spend");
+  await Fantasy.buyToken(0, "index", "amount to spend");
 }
 
 // We recommend this pattern to be able to use async/await everywhere

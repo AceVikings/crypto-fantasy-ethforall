@@ -45,9 +45,7 @@ contract AddressRegistry is Ownable {
     function getAllPrices() external view returns (uint[] memory) {
         uint[] memory prices = new uint[](feeds.length);
         for (uint i = 0; i < feeds.length; i++) {
-            AggregatorV3Interface priceFeed = AggregatorV3Interface(
-                feeds[uint(Tokens.BTC)]
-            );
+            AggregatorV3Interface priceFeed = AggregatorV3Interface(feeds[i]);
             // prettier-ignore
             (
             /* uint80 roundID */,

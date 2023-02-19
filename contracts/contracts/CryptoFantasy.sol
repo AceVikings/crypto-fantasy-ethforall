@@ -11,16 +11,15 @@ import "./Interfaces/IRegistry.sol";
 contract CryptoFantasy is ERC721EnumerableUpgradeable, OwnableUpgradeable {
     IRegistry REGISTRY;
     uint public FEE;
-    uint startTime;
-
+    uint public startTime;
+    uint public buyDuration;
     uint[][] priceSnapshot;
     uint[] sortedIndex;
-    uint[] tokenValue;
     uint[6] tokenReturn = [25, 20, 15, 10, 10, 5];
-    uint duration;
-    uint balance;
-    bool tournamentOver;
-    bool retrieved;
+    uint public duration;
+    uint public balance;
+    bool public tournamentOver;
+    bool public retrieved;
     mapping(uint => uint) public userBalance;
     mapping(uint => mapping(uint => uint)) public userPortfolio; //tokenId > token index > amount owned
     mapping(uint => uint) public totalPortfolio;
@@ -29,7 +28,8 @@ contract CryptoFantasy is ERC721EnumerableUpgradeable, OwnableUpgradeable {
         FEE = 0.01 ether;
         startTime = block.timestamp;
         REGISTRY = IRegistry(_registry);
-        duration = 1 days;
+        duration = 10 minutes;
+        buyDuration = 7 minutes;
         __ERC721_init(
             string(
                 abi.encodePacked(
@@ -53,7 +53,10 @@ contract CryptoFantasy is ERC721EnumerableUpgradeable, OwnableUpgradeable {
 
     function buyToken(uint tokenId, uint _index, uint amountToSpend) external {
         require(ownerOf(tokenId) == msg.sender, "Not owner");
-        require(block.timestamp <= startTime + 1 days, "Purchase period over");
+        require(
+            block.timestamp <= startTime + buyDuration,
+            "Purchase period over"
+        );
         require(userBalance[tokenId] >= amountToSpend, "Not enough balance");
         require(priceSnapshot[0][_index] != 0, "Invalid index");
         userBalance[tokenId] -= amountToSpend;
