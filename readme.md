@@ -10,3 +10,5 @@ After the buy period is over, users wait for tournament to end which can be auto
 Further, our onboarding process is boosted by **arcana wallets** making it easier for new users to try out our platform.
 
 Contract on Mumbai Testnet: 0x66b072290Bf5E4a695755b16AfbeDb9D0A566137
+Registry on Mumbai Testnet:
+0xB607F90E9b7317f519f8A2dFa2C709560171C36e
