@@ -10,13 +10,15 @@ async function main() {
   const CryptoFantasyFactory = await hre.ethers.getContractFactory(
     "CryptoFantasy"
   );
-  const Fantasy = await CryptoFantasyFactory.attach("");
+  const Fantasy = await CryptoFantasyFactory.attach(
+    "0xDecc96d056Cc90279F5DD97AB6be18637cDA5Cfc"
+  );
   await Fantasy.register({ value: hre.ethers.utils.parseEther("0.01") });
   console.log("Registered");
-  await Fantasy.buyToken(0, "index", "amount to spend");
-  await Fantasy.buyToken(0, "index", "amount to spend");
-  await Fantasy.buyToken(0, "index", "amount to spend");
-  await Fantasy.buyToken(0, "index", "amount to spend");
+  await Fantasy.buyToken(1, "0", "500000000000");
+  await Fantasy.buyToken(1, "1", "300000000000");
+  //   await Fantasy.buyToken(0, "index", "amount to spend");
+  //   await Fantasy.buyToken(0, "index", "amount to spend");
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -148,5 +148,17 @@ describe("Fantasy", function () {
       );
       expect(await fantasy.totalPortfolio(0)).to.eq(amount);
     });
+    it("Should end Tournament", async function () {
+      // advance time by one hour and mine a new block
+      for (let i = 0; i < 8; i++) {
+        await fantasy.buyToken(1, i, ethers.utils.parseUnits("10", 8));
+      }
+      await time.increase(3600);
+      await fantasy.endCompetition();
+      console.log(await fantasy.getReward(1));
+    });
+    it("Should get reward", async function () {
+      await fantasy.retrieveReward(1);
+    });
   });
 });

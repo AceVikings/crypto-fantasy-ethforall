@@ -14,7 +14,7 @@ contract CryptoFantasy is ERC721EnumerableUpgradeable, OwnableUpgradeable {
     uint public startTime;
     uint public buyDuration;
     uint[][] priceSnapshot;
-    uint[] sortedIndex;
+    uint[] public sortedIndex;
     uint[6] tokenReturn = [25, 20, 15, 10, 10, 5];
     uint public duration;
     uint public balance;
@@ -28,8 +28,8 @@ contract CryptoFantasy is ERC721EnumerableUpgradeable, OwnableUpgradeable {
         FEE = 0.01 ether;
         startTime = block.timestamp;
         REGISTRY = IRegistry(_registry);
-        duration = 10 minutes;
-        buyDuration = 7 minutes;
+        duration = 7 minutes;
+        buyDuration = 5 minutes;
         __ERC721_init(
             string(
                 abi.encodePacked(
@@ -93,14 +93,15 @@ contract CryptoFantasy is ERC721EnumerableUpgradeable, OwnableUpgradeable {
 
     function getReward(uint tokenId) public view returns (uint) {
         uint amount = 0;
-        for (uint i = 0; i < tokenReturn.length; i++) {
+        for (uint i = 0; i < 6; i++) {
             uint tokenIndex = sortedIndex[i];
-            // userPortfolio/totalPortfolio * contractBalance * tokenReturn/100
-            amount +=
-                (userPortfolio[tokenId][tokenIndex] *
-                    tokenReturn[i] *
-                    balance) /
-                (totalPortfolio[tokenIndex] * 100);
+            if (userPortfolio[tokenId][tokenIndex] > 0) {
+                amount +=
+                    (userPortfolio[tokenId][tokenIndex] *
+                        tokenReturn[i] *
+                        balance) /
+                    (totalPortfolio[tokenIndex] * 100);
+            }
         }
         return amount;
     }
@@ -115,11 +116,7 @@ contract CryptoFantasy is ERC721EnumerableUpgradeable, OwnableUpgradeable {
 
     function sortIndex(int[] memory delta) private {
         uint[] memory index = insertionSort(delta);
-        for (
-            uint i = index.length - 1;
-            i > index.length - tokenReturn.length - 1;
-            i--
-        ) {
+        for (uint i = index.length - 1; i > 1; i--) {
             sortedIndex.push(index[i]);
         }
     }
