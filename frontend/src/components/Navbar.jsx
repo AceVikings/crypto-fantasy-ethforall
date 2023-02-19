@@ -2,7 +2,7 @@ import React from "react";
 import { useWeb3Context } from "../contexts/Web3Context";
 
 function Navbar() {
-  const { account, connectWallet } = useWeb3Context();
+  const { account, connectWallet, connectArcana, logout } = useWeb3Context();
   return (
     <div className="z-50 text-gray-100 fixed top-0 w-full">
       <div className="flex justify-between items-center px-4 py-3 sm:px-6 xl:justify-start xl:space-x-10 bg-gray-800">
@@ -61,6 +61,20 @@ function Navbar() {
             </div>
           </nav>
           <div className="flex items-center xl:ml-12">
+            <button
+              onClick={!account ? connectArcana : logout}
+              className="bg-gray-800 hover:bg-primary hover:text-white text-white text-on-primary ml-6 w-40 text-sm lg:text-base font-medium py-2 px-5 rounded-sm whitespace-nowrap truncate flex-shrink-0 focus:outline-none focus:border-transparent"
+              style={{
+                borderRadius: "20px",
+                border: "1px solid #b488f5",
+                boxShadow:
+                  "0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)",
+              }}
+            >
+              <div className="flex items-center text-akbar text-lg justify-center">
+                <span className>{!account ? "Connect Arcana" : `Logout`}</span>
+              </div>
+            </button>
             <button
               onClick={!account ? connectWallet : () => {}}
               className="bg-gray-800 hover:bg-primary hover:text-white text-white text-on-primary ml-6 w-40 text-sm lg:text-base font-medium py-2 px-5 rounded-sm whitespace-nowrap truncate flex-shrink-0 focus:outline-none focus:border-transparent"
