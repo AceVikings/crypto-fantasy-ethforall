@@ -9,6 +9,6 @@ Each portfolio starts with a base balance of 20,000$ using which users can buy t
 After the buy period is over, users wait for tournament to end which can be automated using **Chainlink Keepers**. We then calculate a delta value difference in initial and final prices and order the tokens. Top 6 tokens are then distributed rewards based on pre-defined weightage and users can collect these rewards.<br>
 Further, our onboarding process is boosted by **arcana wallets** making it easier for new users to try out our platform.
 
-Contract on Mumbai Testnet: 0x66b072290Bf5E4a695755b16AfbeDb9D0A566137
+Contract on Mumbai Testnet: 0x66b072290Bf5E4a695755b16AfbeDb9D0A566137 <br>
 Registry on Mumbai Testnet:
 0xB607F90E9b7317f519f8A2dFa2C709560171C36e
