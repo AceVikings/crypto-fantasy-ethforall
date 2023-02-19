@@ -28,8 +28,8 @@ contract CryptoFantasy is ERC721EnumerableUpgradeable, OwnableUpgradeable {
         FEE = 0.01 ether;
         startTime = block.timestamp;
         REGISTRY = IRegistry(_registry);
-        duration = 7 minutes;
-        buyDuration = 5 minutes;
+        duration = 5 days;
+        buyDuration = 2 days;
         __ERC721_init(
             string(
                 abi.encodePacked(
